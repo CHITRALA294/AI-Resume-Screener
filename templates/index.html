@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>AI Resume Screener</title>
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+
+      font-family:'Segoe UI',sans-serif;
+
+      background:
+      linear-gradient(135deg,
+      #667eea 0%,
+      #764ba2 100%);
+
+      min-height:100vh;
+
+      padding:20px;
+
+      transition:
+      background 0.4s,
+      color 0.4s;
+    }
+
+    .container{
+
+      max-width:850px;
+
+      margin:auto;
+    }
+
+    h1{
+
+      text-align:center;
+
+      color:white;
+
+      font-size:2.5rem;
+
+      margin-bottom:10px;
+
+      animation:fadeIn 1s ease;
+    }
+
+    .subtitle{
+
+      text-align:center;
+
+      color:white;
+
+      font-size:1rem;
+
+      margin-bottom:30px;
+
+      opacity:0.9;
+
+      animation:fadeIn 1.5s ease;
+    }
+
+    .card{
+
+      background:white;
+
+      border-radius:16px;
+
+      padding:25px;
+
+      margin-bottom:20px;
+
+      box-shadow:
+      0 10px 30px rgba(0,0,0,0.15);
+
+      animation:fadeUp 0.8s ease;
+    }
+
+    .card h3{
+
+      color:#4a4a4a;
+
+      margin-bottom:12px;
+    }
+
+    input[type="file"]{
+
+      width:100%;
+
+      padding:12px;
+
+      border:2px dashed #667eea;
+
+      border-radius:10px;
+
+      background:#f8f7ff;
+
+      cursor:pointer;
+    }
+
+    textarea{
+
+      width:100%;
+
+      padding:12px;
+
+      border:2px solid #e0e0e0;
+
+      border-radius:10px;
+
+      resize:vertical;
+
+      font-size:0.95rem;
+
+      margin-top:10px;
+    }
+
+    textarea:focus{
+
+      outline:none;
+
+      border-color:#667eea;
+    }
+
+    button{
+
+      width:100%;
+
+      padding:14px;
+
+      background:
+      linear-gradient(135deg,
+      #667eea,
+      #764ba2);
+
+      color:white;
+
+      border:none;
+
+      border-radius:10px;
+
+      font-size:1rem;
+
+      font-weight:bold;
+
+      cursor:pointer;
+
+      margin-top:15px;
+
+      transition:
+      transform 0.2s,
+      opacity 0.2s;
+    }
+
+    button:hover{
+
+      opacity:0.9;
+
+      transform:translateY(-2px);
+    }
+
+    .hidden{
+
+      display:none;
+    }
+
+    .score-section{
+
+      display:flex;
+
+      flex-direction:column;
+
+      align-items:center;
+
+      padding:20px 0;
+    }
+
+    .circle-wrap{
+
+      position:relative;
+
+      width:160px;
+
+      height:160px;
+    }
+
+    .circle-wrap svg{
+
+      transform:rotate(-90deg);
+    }
+
+    .circle-bg{
+
+      fill:none;
+
+      stroke:#e0e0e0;
+
+      stroke-width:12;
+    }
+
+    .circle-fill{
+
+      fill:none;
+
+      stroke-width:12;
+
+      stroke-linecap:round;
+
+      transition:
+      stroke-dashoffset 1.5s ease;
+
+      filter:
+      drop-shadow(0 0 8px rgba(0,0,0,0.2));
+    }
+
+    .score-text{
+
+      position:absolute;
+
+      top:50%;
+
+      left:50%;
+
+      transform:
+      translate(-50%, -50%);
+
+      text-align:center;
+    }
+
+    .score-number{
+
+      font-size:2rem;
+
+      font-weight:bold;
+    }
+
+    .score-label{
+
+      font-size:0.8rem;
+
+      color:#888;
+    }
+
+    .verdict-badge{
+
+      margin-top:12px;
+
+      padding:8px 20px;
+
+      border-radius:20px;
+
+      font-weight:bold;
+    }
+
+    .strong{
+
+      background:#d4edda;
+      color:#155724;
+    }
+
+    .moderate{
+
+      background:#fff3cd;
+      color:#856404;
+    }
+
+    .weak{
+
+      background:#f8d7da;
+      color:#721c24;
+    }
+
+    .info-grid{
+
+      display:grid;
+
+      grid-template-columns:1fr 1fr;
+
+      gap:12px;
+
+      margin-bottom:15px;
+    }
+
+    .info-item{
+
+      background:#f8f7ff;
+
+      padding:12px;
+
+      border-radius:10px;
+
+      border-left:4px solid #667eea;
+    }
+
+    .label{
+
+      font-size:0.75rem;
+
+      color:#888;
+    }
+
+    .value{
+
+      font-size:0.95rem;
+
+      font-weight:600;
+
+      margin-top:3px;
+    }
+
+    .skill-tag{
+
+      display:inline-block;
+
+      background:#667eea;
+
+      color:white;
+
+      padding:4px 12px;
+
+      border-radius:20px;
+
+      font-size:0.8rem;
+
+      margin:4px;
+    }
+
+    .missing-tag{
+
+      display:inline-block;
+
+      background:#f8d7da;
+
+      color:#721c24;
+
+      padding:4px 12px;
+
+      border-radius:20px;
+
+      font-size:0.8rem;
+
+      margin:4px;
+    }
+
+    .tip{
+
+      background:#fff3cd;
+
+      border-left:4px solid #ffc107;
+
+      padding:10px 14px;
+
+      border-radius:8px;
+
+      margin:8px 0;
+    }
+
+    .question-item{
+
+      background:#f8f7ff;
+
+      border-left:4px solid #764ba2;
+
+      padding:12px;
+
+      border-radius:8px;
+
+      margin:8px 0;
+    }
+
+    .download-btn{
+
+      background:
+      linear-gradient(135deg,
+      #11998e,
+      #38ef7d);
+    }
+
+    .spinner{
+
+      display:inline-block;
+
+      width:20px;
+      height:20px;
+
+      border:3px solid rgba(255,255,255,0.4);
+
+      border-top-color:white;
+
+      border-radius:50%;
+
+      animation:spin 0.8s linear infinite;
+
+      margin-right:8px;
+    }
+
+    .section-title{
+
+      font-size:1rem;
+
+      font-weight:700;
+
+      margin:16px 0 8px;
+    }
+
+    @keyframes spin{
+
+      to{
+        transform:rotate(360deg);
+      }
+    }
+
+    @keyframes fadeIn{
+
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes fadeUp{
+
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* DARK MODE */
+
+    .dark-mode{
+
+      background:
+      linear-gradient(135deg,
+      #111827 0%,
+      #1f2937 100%);
+    }
+
+    .dark-mode .card{
+
+      background:#1f2937;
+
+      color:white;
+    }
+
+    .dark-mode textarea,
+    .dark-mode input{
+
+      background:#111827;
+
+      color:white;
+
+      border:1px solid #374151;
+    }
+
+    .dark-mode .info-item{
+
+      background:#111827;
+
+      color:white;
+    }
+
+    .dark-mode .question-item{
+
+      background:#111827;
+
+      color:white;
+    }
+
+    .dark-mode .tip{
+
+      background:#2d2d2d;
+
+      color:white;
+    }
+
+    .dark-mode .label{
+
+      color:#ccc;
+    }
+
+    .dark-mode .score-label{
+
+      color:#ddd;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<button id="themeToggle"
+onclick="toggleTheme()"
+style="
+position:fixed;
+top:20px;
+right:20px;
+padding:10px 16px;
+border:none;
+border-radius:10px;
+background:#111827;
+color:white;
+cursor:pointer;
+font-weight:bold;
+z-index:999;
+width:auto;
+">
+
+🌙 Dark Mode
+
+</button>
+
+<div class="container">
+
+<h1>🤖 AI Resume Screener</h1>
+
+<p class="subtitle">
+
+Analyze resumes with AI-powered ATS scoring,
+missing skill detection, and interview insights.
+
+</p>
+
+<!-- Upload Card -->
+
+<div class="card">
+
+  <h3>📄 Upload Resume (PDF)</h3>
+
+  <input type="file"
+         id="resumeFile"
+         accept=".pdf">
+
+  <h3 style="margin-top:16px">
+    💼 Job Description
+  </h3>
+
+  <textarea id="jobDesc"
+            rows="5"
+            placeholder="Paste the job description here..."></textarea>
+
+  <button id="analyzeBtn"
+          onclick="analyzeResume()">
+
+    🔍 Analyze Resume
+
+  </button>
+
+</div>
+
+<!-- Results -->
+
+<div class="card hidden"
+     id="results">
+
+  <!-- Score -->
+
+  <div class="score-section">
+
+    <div class="circle-wrap">
+
+      <svg width="160"
+           height="160"
+           viewBox="0 0 160 160">
+
+        <circle class="circle-bg"
+                cx="80"
+                cy="80"
+                r="68"/>
+
+        <circle class="circle-fill"
+                id="scoreCircle"
+                cx="80"
+                cy="80"
+                r="68"
+                stroke-dasharray="427"
+                stroke-dashoffset="427"/>
+
+      </svg>
+
+      <div class="score-text">
+
+        <div class="score-number"
+             id="scoreNum">
+
+          0%
+
+        </div>
+
+        <div class="score-label">
+          Match Score
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="verdict-badge"
+         id="verdictBadge">
+
+      Analyzing...
+
+    </div>
+
+  </div>
+
+  <!-- Candidate Info -->
+
+  <div class="section-title">
+    👤 Candidate Info
+  </div>
+
+  <div class="info-grid">
+
+    <div class="info-item">
+      <div class="label">Name</div>
+      <div class="value" id="name">—</div>
+    </div>
+
+    <div class="info-item">
+      <div class="label">Email</div>
+      <div class="value" id="email">—</div>
+    </div>
+
+    <div class="info-item">
+      <div class="label">Phone</div>
+      <div class="value" id="phone">—</div>
+    </div>
+
+    <div class="info-item">
+      <div class="label">Education</div>
+      <div class="value" id="education">—</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    ✅ Skills Detected
+  </div>
+
+  <div id="skills"></div>
+
+  <div class="section-title">
+    ❌ Missing Skills
+  </div>
+
+  <div id="missing"></div>
+
+  <div class="section-title">
+    💡 Resume Tips
+  </div>
+
+  <div id="tips"></div>
+
+  <div class="section-title">
+    🎯 Interview Questions
+  </div>
+
+  <div id="questions"></div>
+
+  <button class="download-btn"
+          onclick="downloadResults()">
+
+    📥 Download PDF Report
+
+  </button>
+
+</div>
+
+</div>
+
+<script>
+
+async function analyzeResume(){
+
+  const file =
+  document.getElementById('resumeFile').files[0];
+
+  const jobDesc =
+  document.getElementById('jobDesc').value;
+
+  if(!file || !jobDesc){
+
+    alert(
+      'Please upload a resume and enter job description!'
+    );
+
+    return;
+  }
+
+  const btn =
+  document.getElementById('analyzeBtn');
+
+  btn.disabled = true;
+
+  btn.innerHTML =
+  '<span class="spinner"></span> Analyzing...';
+
+  const formData = new FormData();
+
+  formData.append('resume', file);
+
+  formData.append('job_description', jobDesc);
+
+  try{
+
+    const res =
+    await fetch(
+      'http://localhost:5000/analyze',
+      {
+        method:'POST',
+        body:formData
+      }
+    );
+
+    const data =
+    await res.json();
+
+    displayResults(data);
+  }
+
+  catch(err){
+
+    alert(
+      'Error! Make sure Flask server is running.'
+    );
+  }
+
+  finally{
+
+    btn.disabled = false;
+
+    btn.innerHTML =
+    '🔍 Analyze Resume';
+  }
+}
+
+function displayResults(data){
+
+  document.getElementById('results')
+  .classList.remove('hidden');
+
+  const score =
+  data.match_score;
+
+  const circle =
+  document.getElementById('scoreCircle');
+
+  const offset =
+  427 - (427 * score / 100);
+
+  circle.style.strokeDashoffset =
+  offset;
+
+  circle.style.stroke =
+  score >= 75 ? '#28a745'
+  :
+  score >= 50 ? '#ffc107'
+  :
+  '#dc3545';
+
+  document.getElementById('scoreNum')
+  .textContent =
+  score + '%';
+
+  const vb =
+  document.getElementById('verdictBadge');
+
+  vb.textContent =
+  (score >= 75 ? '✅ '
+  :
+  score >= 50 ? '⚠️ '
+  :
+  '❌ ')
+  + data.verdict;
+
+  vb.className =
+  'verdict-badge '
+  +
+  (score >= 75
+  ? 'strong'
+  :
+  score >= 50
+  ? 'moderate'
+  :
+  'weak');
+
+  document.getElementById('name')
+  .textContent =
+  data.name;
+
+  document.getElementById('email')
+  .textContent =
+  data.email;
+
+  document.getElementById('phone')
+  .textContent =
+  data.phone;
+
+  document.getElementById('education')
+  .textContent =
+  (data.education || []).join(', ');
+
+  document.getElementById('skills')
+  .innerHTML =
+  (data.skills || []).map(
+    s =>
+    `<span class="skill-tag">${s}</span>`
+  ).join('');
+
+  document.getElementById('missing')
+  .innerHTML =
+  (data.missing || []).map(
+    s =>
+    `<span class="missing-tag">${s}</span>`
+  ).join('');
+
+  document.getElementById('tips')
+  .innerHTML =
+  (data.tips || []).map(
+    t =>
+    `<div class="tip">${t}</div>`
+  ).join('');
+
+  const qs =
+  data.questions
+  .split('\n')
+  .filter(q => q.trim());
+
+  document.getElementById('questions')
+  .innerHTML =
+  qs.map(
+    q =>
+    `<div class="question-item">${q}</div>`
+  ).join('');
+
+  document.getElementById('results')
+  .scrollIntoView({
+    behavior:'smooth'
+  });
+}
+
+async function downloadResults(){
+
+  const response =
+  await fetch(
+    'http://localhost:5000/download-report',
+    {
+
+      method:'POST',
+
+      headers:{
+        'Content-Type':'application/json'
+      },
+
+      body:JSON.stringify({
+
+        name:
+        document.getElementById('name').textContent,
+
+        email:
+        document.getElementById('email').textContent,
+
+        phone:
+        document.getElementById('phone').textContent,
+
+        match_score:
+        document.getElementById('scoreNum')
+        .textContent.replace('%',''),
+
+        verdict:
+        document.getElementById('verdictBadge')
+        .textContent,
+
+        skills:
+        [...document.querySelectorAll('.skill-tag')]
+        .map(el => el.textContent),
+
+        missing:
+        [...document.querySelectorAll('.missing-tag')]
+        .map(el => el.textContent),
+
+        tips:
+        [...document.querySelectorAll('.tip')]
+        .map(el => el.textContent),
+
+        questions:
+        [...document.querySelectorAll('.question-item')]
+        .map(el => el.textContent)
+        .join('\n')
+      })
+    }
+  );
+
+  const blob =
+  await response.blob();
+
+  const url =
+  window.URL.createObjectURL(blob);
+
+  const a =
+  document.createElement('a');
+
+  a.href = url;
+
+  a.download =
+  "resume_analysis_report.pdf";
+
+  a.click();
+}
+
+function toggleTheme(){
+
+  document.body
+  .classList
+  .toggle('dark-mode');
+
+  const btn =
+  document.getElementById('themeToggle');
+
+  if(
+    document.body
+    .classList
+    .contains('dark-mode')
+  ){
+
+    btn.innerHTML =
+    "☀️ Light Mode";
+
+    btn.style.background =
+    "white";
+
+    btn.style.color =
+    "black";
+  }
+
+  else{
+
+    btn.innerHTML =
+    "🌙 Dark Mode";
+
+    btn.style.background =
+    "#111827";
+
+    btn.style.color =
+    "white";
+  }
+}
+
+</script>
+
+</body>
+</html>
