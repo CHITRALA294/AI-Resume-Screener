@@ -12,9 +12,9 @@ from reportlab.lib.styles import getSampleStyleSheet
 import os
 import tempfile
 
-from app.parser import parse_resume
-from app.matcher import match_resume_job
-from app.question_gen import generate_questions
+from parser import parse_resume
+from matcher import match_resume_job
+from question_gen import generate_questions
 
 app = Flask(__name__)
 CORS(app)
