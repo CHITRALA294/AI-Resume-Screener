@@ -1,17 +1,6 @@
 from flask import Flask, request, jsonify, send_file, render_template
 from flask_cors import CORS
 
-# ... other imports ...
-
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/analyze', methods=['POST'])
-def analyze():
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -30,8 +19,11 @@ from question_gen import generate_questions
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/analyze', methods=['POST'])
+@app.route('/')
+def home():
+    return render_template('index.html')
 
+@app.route('/analyze', methods=['POST'])
 def analyze():
 
     pdf_file = request.files['resume']
