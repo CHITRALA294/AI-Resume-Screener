@@ -30,6 +30,27 @@ def extract_phone(text):
 
     return phone[0] if phone else "Not Found"
 
+def extract_education(text):
+
+    education_keywords = [
+        "b.tech",
+        "btech",
+        "bachelor",
+        "engineering",
+        "m.tech",
+        "degree"
+    ]
+
+    text_lower = text.lower()
+
+    found = []
+
+    for keyword in education_keywords:
+        if keyword in text_lower:
+            found.append(keyword)
+
+    return found
+
 def extract_skills(text):
 
     text = text.lower()
@@ -57,7 +78,7 @@ def parse_resume(pdf_path):
     "email": extract_email(raw_text),
     "phone": extract_phone(raw_text),
     "skills": extract_skills(raw_text),
-    "education": [],
+    "education": extract_education(raw_text),
     "experience": [],
     "raw_text": raw_text
 }

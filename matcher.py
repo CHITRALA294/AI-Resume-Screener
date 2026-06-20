@@ -3,12 +3,26 @@ def match_resume_job(resume_text,
                      resume_skills=None):
 
     common_skills = [
-        "python", "flask", "django",
-        "machine learning", "sql",
-        "react", "docker", "aws",
-        "html", "css", "javascript",
-        "pandas", "numpy"
-    ]
+    "python",
+    "java",
+    "sql",
+    "power bi",
+    "excel",
+    "machine learning",
+    "data analysis",
+    "data visualization",
+    "communication skills",
+    "flask",
+    "django",
+    "react",
+    "docker",
+    "aws",
+    "html",
+    "css",
+    "javascript",
+    "pandas",
+    "numpy"
+]
 
     job_lower = job_description.lower()
 
@@ -61,12 +75,26 @@ def get_missing_skills(resume_skills,
     missing = []
 
     common_skills = [
-        "python", "flask", "django",
-        "machine learning", "sql",
-        "react", "docker", "aws",
-        "html", "css", "javascript",
-        "pandas", "numpy"
-    ]
+    "python",
+    "java",
+    "sql",
+    "power bi",
+    "excel",
+    "machine learning",
+    "data analysis",
+    "data visualization",
+    "communication skills",
+    "flask",
+    "django",
+    "react",
+    "docker",
+    "aws",
+    "html",
+    "css",
+    "javascript",
+    "pandas",
+    "numpy"
+]
 
     for skill in common_skills:
 
