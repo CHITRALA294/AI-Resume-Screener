@@ -53,9 +53,11 @@ def parse_resume(pdf_path):
         raw_text += page.get_text()
 
     return {
-        "name": raw_text.split('\n')[0],
-        "email": extract_email(raw_text),
-        "phone": extract_phone(raw_text),
-        "skills": extract_skills(raw_text),
-        "raw_text": raw_text
-    }
+    "name": raw_text.split('\n')[0],
+    "email": extract_email(raw_text),
+    "phone": extract_phone(raw_text),
+    "skills": extract_skills(raw_text),
+    "education": [],
+    "experience": [],
+    "raw_text": raw_text
+}

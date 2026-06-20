@@ -13,7 +13,7 @@ import os
 import tempfile
 
 from parser import parse_resume
-from matcher import match_resume_job
+from matcher import match_resume_job, get_missing_skills
 from question_gen import generate_questions
 
 app = Flask(__name__)
@@ -79,10 +79,10 @@ def analyze():
         parsed['skills'],
 
         "education":
-        parsed['education'],
+        parsed.get('education', []),
 
         "experience":
-        parsed['experience'],
+        parsed.get('experience', []),
 
         "match_score":
         match['match_score'],
