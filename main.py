@@ -62,6 +62,8 @@ def analyze():
         match['match_score']
     )
 
+    breakdown = get_score_breakdown(parsed)
+
     os.remove(tmp_path)
 
     print("ROLE =", suggest_role(parsed['skills']))
@@ -104,8 +106,23 @@ def analyze():
         "recommended_role":
         suggest_role(parsed['skills']),
         
+        "resume_category":
+        get_resume_category(parsed['skills']),
+         
         "resume_strength":
-        get_resume_strength(parsed['skills'])
+        get_resume_strength(parsed['skills']),
+        
+        "job_readiness":
+        calculate_readiness(
+        match['match_score'],
+        missing
+        ),
+         
+        "breakdown":
+        breakdown,
+        
+        "roadmap":
+        generate_roadmap(missing),
     })
     
 def suggest_role(skills):
@@ -122,6 +139,20 @@ def suggest_role(skills):
     else:
         return "Software Developer"
     
+def get_resume_category(skills):
+
+    if "python" in skills and "sql" in skills:
+        return "Data Science / Analytics"
+
+    elif "html" in skills and "css" in skills:
+        return "Web Development"
+
+    elif "machine learning" in skills:
+        return "Artificial Intelligence"
+
+    else:
+        return "Software Development"
+    
 def get_resume_strength(skills):
 
     count = len(skills)
@@ -134,6 +165,40 @@ def get_resume_strength(skills):
 
     else:
         return "Beginner"
+    
+def get_score_breakdown(parsed):
+
+    return {
+        "skills_score":
+        min(len(parsed['skills']) * 10, 100),
+
+        "education_score":
+        60 if parsed.get('education') else 20,
+
+        "experience_score":
+        40
+    }
+    
+def calculate_readiness(score, missing_skills):
+
+    readiness = score
+
+    readiness += 30
+
+    readiness -= len(missing_skills) * 5
+
+    readiness = max(0, min(100, readiness))
+
+    return readiness
+
+def generate_roadmap(missing_skills):
+
+    roadmap = []
+
+    for skill in missing_skills:
+        roadmap.append(f"Learn {skill}")
+
+    return roadmap
 
 def generate_tips(missing_skills, score):
 
