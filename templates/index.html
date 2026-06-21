@@ -654,6 +654,16 @@ missing skill detection, and interview insights.
       <div class="value" id="education">—</div>
     </div>
 
+    <div class="info-item">
+      <div class="label">Recommended Role</div>
+      <div class="value" id="role">-</div>
+    </div>
+
+    <div class="info-item">
+     <div class="label">Resume Strength</div>
+      <div class="value" id="strength">-</div>
+    </div>
+
   </div>
 
   <div class="section-title">
@@ -737,6 +747,8 @@ async function analyzeResume(){
 
     const data =
     await res.json();
+    document.getElementById('strength').textContent =
+    data.resume_strength || "-";
 
     displayResults(data);
   }
@@ -822,6 +834,10 @@ function displayResults(data){
   document.getElementById('education')
   .textContent =
   (data.education || []).join(', ');
+
+  document.getElementById('role')
+  .textContent =
+  data.recommended_role || "-";
 
   document.getElementById('skills')
   .innerHTML =

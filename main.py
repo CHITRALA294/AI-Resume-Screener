@@ -64,6 +64,8 @@ def analyze():
 
     os.remove(tmp_path)
 
+    print("ROLE =", suggest_role(parsed['skills']))
+    
     return jsonify({
 
         "name":
@@ -97,9 +99,41 @@ def analyze():
         questions,
 
         "tips":
-        tips
+        tips,
+        
+        "recommended_role":
+        suggest_role(parsed['skills']),
+        
+        "resume_strength":
+        get_resume_strength(parsed['skills'])
     })
+    
+def suggest_role(skills):
 
+    if "python" in skills and "sql" in skills:
+        return "Data Analyst"
+
+    elif "html" in skills and "css" in skills:
+        return "Frontend Developer"
+
+    elif "machine learning" in skills:
+        return "Machine Learning Engineer"
+
+    else:
+        return "Software Developer"
+    
+def get_resume_strength(skills):
+
+    count = len(skills)
+
+    if count >= 9:
+        return "Advanced"
+
+    elif count >= 5:
+        return "Intermediate"
+
+    else:
+        return "Beginner"
 
 def generate_tips(missing_skills, score):
 
