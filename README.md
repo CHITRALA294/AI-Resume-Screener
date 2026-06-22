@@ -16,6 +16,11 @@ The goal of the project is to help job seekers understand how well their resume 
 * Extract candidate information
 * Parse skills from resumes
 * Detect education details
+* Recommend suitable job roles
+* Assess resume strength level
+* Generate career roadmap
+* Calculate job readiness score
+* Provide score breakdown analysis
 
 ### ATS Match Score
 
@@ -43,7 +48,12 @@ The goal of the project is to help job seekers understand how well their resume 
 * Download resume analysis results as a PDF report
 
 ---
+### Additional Features
 
+* Dark Mode / Light Mode support
+* Career guidance dashboard
+* Resume score breakdown
+  
 ## Tech Stack
 
 * Python
@@ -114,13 +124,17 @@ http://127.0.0.1:5000
 2. Paste Job Description
 3. Click Analyze Resume
 4. View:
-
-   * ATS Score
-   * Candidate Information
-   * Skills Detected
-   * Missing Skills
-   * Interview Questions
-   * Resume Tips
+ATS Score
+Candidate Information
+Recommended Role
+Resume Strength
+Job Readiness Score
+Career Roadmap
+Score Breakdown
+Skills Detected
+Missing Skills
+Interview Questions
+Resume Tips
 5. Download PDF Report
 
 ---
