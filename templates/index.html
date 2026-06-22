@@ -20,13 +20,24 @@
     
     #scoreBreakdown div{
 
-  background:linear-gradient(
-    135deg,
-    #667eea,
-    #764ba2
-    text-align:center;
-    font-size:1rem;
-  );
+  background:#eef2ff;
+
+  color:#111827;
+
+  padding:12px;
+
+  margin:10px 0;
+
+  border-radius:10px;
+
+  font-weight:600;
+
+  text-align:center;
+
+  font-size:1rem;
+
+  border-left:4px solid #667eea;
+}
 
   color:white;
 
@@ -41,15 +52,11 @@
 
   .dark-mode #scoreBreakdown div{
 
-    background:#111827;
-
-    color:white;
-  }
-  .dark-mode #scoreBreakdown div{
-
-  background:#111827;
+  background:#312e81;
 
   color:white;
+
+  border-left:4px solid #818cf8;
 }
 
 .footer{
@@ -131,14 +138,18 @@
     }
 
     .card{
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:20px;
+
+  background:white;
+
+  border-radius:16px;
+
   padding:25px;
+
   margin-bottom:20px;
-  box-shadow:0 8px 30px rgba(0,0,0,0.25);
-  }
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.15);
+}
 
     .card h3{
 
@@ -343,9 +354,7 @@
 
     .info-item{
 
-  background:rgba(255,255,255,0.12);
-
-  backdrop-filter:blur(8px);
+  background:white;
 
   padding:15px;
 
@@ -371,17 +380,19 @@
 
       font-size:0.75rem;
 
-      color:#888;
+      color:#4b5563;
     }
 
     .value{
 
-      font-size:1rem;
+  font-size:1rem;
 
-      font-weight:700;
+  font-weight:700;
 
-      margin-top:3px;
-    }
+  margin-top:3px;
+
+  color:#111827;
+}
 
     .skill-tag{
      display:inline-block;
@@ -535,6 +546,8 @@
       border:1px solid #374151;
     }
 
+    
+
     .dark-mode .info-item{
 
       background:#111827;
@@ -565,6 +578,14 @@
 
       color:#ddd;
     }
+
+    .dark-mode .value{
+  color:white;
+}
+
+.dark-mode .label{
+  color:#d1d5db;
+}
 
   </style>
 
