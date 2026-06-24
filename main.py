@@ -122,7 +122,7 @@ def analyze():
         breakdown,
         
         "roadmap":
-        generate_roadmap(missing),
+        generate_roadmap(missing)
     })
     
 def suggest_role(skills):

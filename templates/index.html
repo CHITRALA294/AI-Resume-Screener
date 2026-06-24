@@ -50,6 +50,16 @@
   font-weight:600;
   }
 
+<div class="card">
+  <h3>📋 Resume Summary</h3>
+  <div id="summary">-</div>
+</div>
+
+<div class="card">
+  <h3>📋 Resume Summary</h3>
+  <div id="summary">-</div>
+</div>
+
   .dark-mode #scoreBreakdown div{
 
   background:#312e81;
@@ -57,6 +67,8 @@
   color:white;
 
   border-left:4px solid #818cf8;
+
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .footer{
@@ -71,7 +83,9 @@
 
   opacity:0.9;
 
-  font-size:0.9rem;
+  font-size:1rem;
+
+  font-weight:500;
 }
 
 .footer p{
@@ -82,6 +96,9 @@
 .dark-mode .footer{
 
   color:#d1d5db;
+}
+#scoreBreakdown{
+  width:100%;
 }
 
     body{
@@ -139,7 +156,11 @@
 
     .card{
 
+    width:100%;
+
   background:white;
+
+  transition:0.3s;
 
   border-radius:16px;
 
@@ -149,6 +170,14 @@
 
   box-shadow:
   0 10px 30px rgba(0,0,0,0.15);
+}
+
+.card:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+  0 15px 35px rgba(0,0,0,0.2);
 }
 
     .card h3{
@@ -229,10 +258,13 @@
 
     button:hover{
 
-      opacity:0.9;
+  transform:translateY(-3px);
 
-      transform:translateY(-2px);
-    }
+  box-shadow:
+  0 10px 25px rgba(0,0,0,0.2);
+
+  opacity:0.95;
+}
 
     .hidden{
 
@@ -285,7 +317,7 @@
       stroke-dashoffset 1.5s ease;
 
       filter:
-      drop-shadow(0 0 8px rgba(0,0,0,0.2));
+      drop-shadow(0 0 12px rgba(102,126,234,0.7));
     }
 
     .score-text{
@@ -364,7 +396,7 @@
 
   transition:0.3s;
 
-  min-height:90px;
+  min-height:110px;
 }
 }
 
@@ -394,27 +426,27 @@
   color:#111827;
 }
 
-    .skill-tag{
-     display:inline-block;
-     background:#16a34a;
-     color:white;
-     padding:8px 14px;
-     border-radius:20px;
-     font-size:0.85rem;
-     margin:5px;
-     font-weight:600;
-    }
+  .skill-tag{
+  display:inline-block;
+  background:#16a34a;
+  color:white;
+  padding:8px 16px;
+  font-weight:600;
+  border-radius:20px;
+  font-size:0.85rem;
+  margin:5px;
+}
 
     .missing-tag{
-     display:inline-block;
-     background:#dc2626;
-     color:white;
-     padding:8px 14px;
-     border-radius:20px;
-     font-size:0.85rem;
-     margin:5px;
-     font-weight:600;
-    }
+  display:inline-block;
+  background:#dc2626;
+  color:white;
+  padding:8px 16px;
+  font-weight:600;
+  border-radius:20px;
+  font-size:0.85rem;
+  margin:5px;
+}
 
     .tip{
 
@@ -587,6 +619,15 @@
   color:#d1d5db;
 }
 
+#summary{
+
+  line-height:1.8;
+
+  font-size:1rem;
+
+  font-weight:500;
+}
+
   </style>
 
 </head>
@@ -620,7 +661,7 @@ width:auto;
 
 <p class="subtitle">
 
-ATS Analysis • Career Guidance • Interview Preparation
+ATS Analysis • Career Guidance • Interview Preparation • Resume Insights
 
 </p>
 
@@ -757,13 +798,8 @@ ATS Analysis • Career Guidance • Interview Preparation
 
     <div class="card">
       <h3>📊 Score Breakdown</h3>
-
-      <div id="scoreBreakdown">
-     -
+      <div id="scoreBreakdown">-
     </div>
-</div>
-
-  </div>
 
   <div class="section-title">
     ✅ Skills Detected
@@ -837,7 +873,7 @@ async function analyzeResume(){
 
     const res =
     await fetch(
-      'analyze',
+      '/analyze',
       {
         method:'POST',
         body:formData
@@ -858,21 +894,14 @@ async function analyzeResume(){
   .join('<br>');
 
     displayResults(data);
-
-    document.getElementById('scoreBreakdown').innerHTML =
-    `
-    <div>Skills Score: ${data.breakdown.skills_score}%</div>
-    <div>Education Score: ${data.breakdown.education_score}%</div>
-    <div>Experience Score: ${data.breakdown.experience_score}%</div>
-    <div>ATS Score: ${data.match_score}%</div>
-    `;
-  }
+ 
+}
 
   catch(err){
 
-    alert(
-      'Error! Make sure Flask server is running.'
-    );
+    console.log(err);
+
+alert(err);
   }
 
   finally{
@@ -991,6 +1020,16 @@ function displayResults(data){
   .scrollIntoView({
     behavior:'smooth'
   });
+
+  
+document.getElementById('scoreBreakdown').innerHTML =
+`
+<div>Skills Score: ${data.breakdown.skills_score}%</div>
+<div>Education Score: ${data.breakdown.education_score}%</div>
+<div>Experience Score: ${data.breakdown.experience_score}%</div>
+<div>ATS Score: ${data.match_score}%</div>
+`;
+
 }
 
 async function downloadResults(){
